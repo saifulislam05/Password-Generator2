@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback} from "react";
 import PasswordLengthInput from "./PasswordLengthInput";
 import Checkbox from "./Checkbox";
 import GeneratedPassword from "./GeneratedPassword";
@@ -12,7 +12,7 @@ const PasswordGenerator = () => {
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeSpecialChars, setIncludeSpecialChars] = useState(true);
 
-  const generatePassword = () => {
+  const generatePassword = useCallback(() => {
     const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberChars = "0123456789";
@@ -36,7 +36,13 @@ const PasswordGenerator = () => {
     }
 
     setPassword(newPassword);
-  };
+  }, [
+    passwordLength,
+    includeLowercase,
+    includeUppercase,
+    includeNumbers,
+    includeSpecialChars,
+  ]);
 
   const copyToClipboard = () => {
     if (password === "") {
@@ -77,7 +83,7 @@ const PasswordGenerator = () => {
         <GeneratedPassword password={password} />
         <CopyToClipboardButton copyToClipboard={copyToClipboard} />
       </div>
-      
+
       <div className="flex gap-3 w-fit mx-auto mt-3">
         <button
           onClick={generatePassword}
